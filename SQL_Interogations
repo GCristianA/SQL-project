@@ -1,0 +1,6 @@
+1.Add an email column in the table ANGAJATI.
+
+Alter table angajati
+add (email varchar2(20));
+
+ 
