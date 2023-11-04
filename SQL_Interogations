@@ -3,4 +3,140 @@
 Alter table angajati
 add (email varchar2(20));
 
- 
+
+2.Delete the email column.
+
+ALTER TABLE ANGAJATI
+DROP column email;
+
+
+3. Show the name, surname and salary for the employees that have their ID between 120 and 125.
+
+select nume,prenume,salariu from angajati
+where id_angajat between 120 and 125;
+
+
+4.Create a new table called SALARIATI based on the ANGAJATI table columns but without the data from inside it.
+
+create table Salariati as select * from Angajati 
+where 1=2;
+
+
+5. In CLIENTI table replace the name of the entry with ID_CLIENT=208 to “Petrescu”.
+
+update Clienti
+set nume_client='Petrescu'
+where id_client=208;
+
+
+6. Raise with 250 euros the salary of the employee with the ID equal to 122.
+
+update Angajati
+set salariu=salariu+250
+where id_angajat=122;
+
+
+7. Raise the salary with 350 euros to the employees that have the same ID_SECTIE with the employee with FUNCTIE=”Programator”.
+
+update Angajati
+set salariu=salariu+350
+where id_sectie=(select id_sectie from Angajati where functie='Programator');
+
+
+8. Show info about the employees that have names starting with letter C.
+
+Select * from Angajati
+where nume like 'C%' or nume like 'c%';
+
+
+9. Show the surname, name ,occupation and salary for the employees born in 1991.
+
+select nume,prenume,functie,salariu from Angajati
+where extract (year from data_nasterii)=1991;
+
+
+10. Show the ID of the projects and their name sorted by ID_PRODUS in decreasing order.
+
+select id_produs,denumire
+from produse
+order by id_produs desc;
+
+
+11. Show the employees that are in the same Department with the employee named “Cristian”.
+
+SELECT * FROM angajati
+WHERE id_sectie = (SELECT id_sectie FROM angajati WHERE nume='Cristian');
+
+
+12. Show the date of the buying for products where the sum greater than 30 
+
+select data_cumparare,sum(nr_bucati*pret_bucata) from Cumparaturi
+group by data_cumparare
+having sum(nr_bucati*pret_bucata)>30;
+
+
+13. Insert into the PRODUSE table a product using a method so it can be entered manually.
+
+insert into produse values (&id_produs,&denumire,&descriere);
+
+
+14. Show the name ,surname of an employee only if it’s greater than 6000 euros and their occupation using the JOIN function.
+
+SELECT a.nume,a.prenume,s.specializare
+FROM angajati a, specializare s
+WHERE a.id_angajat=s.id_angajat and salariu>6000;
+
+
+15.Show the ID,surname,name and salary for the employees that have any ID beside 100 and their salary is smaller than everyone else in the department with the ID equal to 100.
+
+SELECT id_angajat,nume,salariu
+FROM angajati
+WHERE salariu < ANY
+ (SELECT salariu FROM angajati
+WHERE id_sectie = 100) 
+AND id_sectie <> 100;
+
+
+16.Show the date when certain employees sold products using a JOIN function.
+
+SELECT a.id_angajat, a.nume,v.data_vanzare
+FROM angajati a, vanzari v
+WHERE a.id_angajat= v.id_angajat (+);
+
+
+17. Create a virtual table that consists from the employees with the ID that’s not between 100 and 110.
+
+CREATE OR REPLACE VIEW virtual_angajati
+AS SELECT * FROM angajati
+WHERE id_angajat not between 100 and 110;
+
+
+18. Create a bonus function for every employee that does the following:
+-employees coming from department with ID=101 will receive a 30% bonus;
+-employees coming from department with ID=108 will receive a 20% bonus;
+-others will receive a 10% bonus.
+
+select id_angajat,nume,prenume,salariu,
+case
+      when id_sectie=101 then 0.3*salariu
+      when id_sectie=108 then 0.2*salariu
+      else 0.1*salariu
+      end Bonus
+from Angajati;
+
+
+19. Show the min,max and average salary for the employees born after 1987.
+
+select max(salariu),min(salariu),avg(salariu) from Angajati
+where extract (year from data_nasterii)>1987;
+
+
+20.Show the ID_ANGAJAT,DENUMIRE,TERMEN and BUGET_ALOCAT for every employee and sort them in decreasing order by the TERMEN.
+
+select a.id_angajat,p.denumire,p.termen,p.buget_alocat
+from activitati a,proiecte p
+where a.id_proiect=p.id_proiect
+order by termen desc;
+
+
+
