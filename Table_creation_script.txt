@@ -1,0 +1,65 @@
+Create Table Angajati
+(id_angajat number(3) constraint pk_angajat Primary key,
+Nume varchar(20) not null,
+Prenume varchar(30) not null ,
+Data_nasterii date,
+Functie varchar2(20),
+Salariu number(8,2),
+id_sectie number(3) unique,
+Constraint fk_sectie foreign key (id_sectie) references Sectii(id_sectie));
+
+Create table Sectii(
+id_sectie number(3) constraint pk_sectie primary key,
+Nume varchar2(30));
+
+Create table Specializare(
+id_angajat number(3) constraint pk_angajat2 primary key,
+specializare varchar2(30));
+
+Create table Activitati(
+id_proiect number(3) constraint pk_proiect primary key,
+id_angajat number(3),
+constraint fk_angajat foreign key (id_angajat) references Angajati(id_angajat));
+
+Create table Cumparaturi(
+Id_cumparare number(3)not null constraint pk_cumparare primary key,
+id_angajat number(3),
+constraint fk_angajat2 foreign key (id_angajat) references Angajati(id_angajat),
+data_cumparare date,
+nr_bucati Number(3),
+pret_bucata number(4,2));
+
+Create table Produse(
+id_produs number(3) not null constraint pk_produs primary key,
+Denumire varchar2(30) not null,
+Descriere varchar2(40));
+
+Create table Clienti(
+id_client number(3) constraint pk_client primary key,
+nume_client varchar(30),
+prenume_client varchar(30),
+adresa varchar2(40));
+
+Create table Proiecte(
+id_proiect number(2) constraint pk_proiect2 primary key,
+Denumire varchar2(30),
+Termen date,
+Buget_alocat number(6,2));
+
+Create table Vanzari(
+id_vanzare number(3) constraint id_vanzare2 primary key,
+id_produs number(3) not null,
+constraint fk_produs2 foreign key (id_produs) references Produse(id_produs),
+id_client number(3)not null,
+constraint fk_client2 foreign key (id_client) references Clienti(id_client),
+id_angajat number(3)not null,
+constraint fk_angajat3 foreign key (id_angajat) references Angajati(id_angajat),
+Data_vanzare date,
+Numar_produse number(3) not null,
+Pret_produs number(4,2) not null);
+
+
+
+
+
+
